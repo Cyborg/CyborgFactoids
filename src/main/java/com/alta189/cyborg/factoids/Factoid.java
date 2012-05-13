@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids;
 
+import com.alta189.cyborg.factoids.util.DateUtil;
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
@@ -27,36 +27,28 @@ import org.pircbotx.User;
 
 @Table(name = "factoids")
 public class Factoid {
-	
 	@Id
 	private int id;
-	
 	@Field
 	private String name;
-
 	@Field
 	private String location;
-
 	@Field
 	private String handler;
-
 	@Field
 	private String contents;
-
 	@Field
 	private String author;
-
 	@Field
 	private boolean locked = false;
-
 	@Field
 	private String locker;
-
 	@Field
 	private boolean forgotten = false;
-
 	@Field
 	private String forgetter;
+	@Field
+	private long timestamp;
 
 	public int getId() {
 		return id;
@@ -79,6 +71,7 @@ public class Factoid {
 		this.location = location;
 		return this;
 	}
+
 	public String getHandler() {
 		return handler;
 	}
@@ -100,7 +93,7 @@ public class Factoid {
 	public String getAuthor() {
 		return author;
 	}
-	
+
 	public Factoid setAuthor(User user) {
 		this.author = user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
 		return this;
@@ -134,7 +127,7 @@ public class Factoid {
 	}
 
 	public Factoid setLocker(User user) {
-		this.locker =  user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
+		this.locker = user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
 		return this;
 	}
 
@@ -148,12 +141,53 @@ public class Factoid {
 	}
 
 	public Factoid setForgetter(User user) {
-		this.forgetter =  user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
+		this.forgetter = user.getNick() + "!" + user.getLogin() + "@" + user.getHostmask();
 		return this;
 	}
 
 	public Factoid seForgetter(String forgetter) {
 		this.forgetter = forgetter;
 		return this;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getDate() {
+		return DateUtil.getFormattedGMTDate(timestamp);
+	}
+
+	public String getInfo() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(name).append(" ");
+		builder.append("<author: \"").append(author).append("\"> ");
+		if (locked) {
+			builder.append("<locked: \"").append(locker).append("\"> ");
+		}
+		if (forgotten) {
+			builder.append("<forgotten: \"").append(forgetter).append("\"> ");
+		}
+		builder.append("<modified: \"").append(getDate()).append("\">");
+		return builder.toString();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(name);
+		if (locked) {
+			builder.append(" <locked>");
+		}
+		if (forgotten) {
+			builder.append(" <forgotten>");
+		}
+		builder.append(" <" + handler + "> ");
+		builder.append(contents);
+		return builder.toString();
 	}
 }
