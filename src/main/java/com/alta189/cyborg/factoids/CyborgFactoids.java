@@ -53,6 +53,8 @@ public class CyborgFactoids extends CommonPlugin {
 		dbConfig.setUser(config.getString("database.mysql.user", MySQLConstants.DefaultUser));
 		dbConfig.setPassword(config.getString("database.mysql.password", MySQLConstants.DefaultPass));
 
+		FactoidManager.init(dbConfig);
+		
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
 		
 		getLogger().log(Level.INFO, "Successfully enabled!");
