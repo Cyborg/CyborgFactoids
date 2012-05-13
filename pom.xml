@@ -6,7 +6,7 @@
 
     <groupId>com.alta189.cyborg</groupId>
     <artifactId>factoids</artifactId>
-    <name>CybogFactoids</name>
+    <name>CyborgFactoids</name>
     <version>1.0.0</version>
     <description>Factoids plugin for Cyborg</description>
 
