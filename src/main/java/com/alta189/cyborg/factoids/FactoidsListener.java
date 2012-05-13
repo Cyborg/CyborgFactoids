@@ -118,7 +118,7 @@ public class FactoidsListener implements Listener {
 			return;
 		}
 
-		if (handle == null) {
+		if (handle == null || result.getReturnType() != ReturnType.MESSAGE || result.isForced()) {
 			switch (result.getReturnType()) {
 				case ACTION:
 					Cyborg.getInstance().sendAction(result.getTarget(), result.getBody());

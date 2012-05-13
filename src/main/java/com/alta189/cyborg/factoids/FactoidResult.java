@@ -24,6 +24,7 @@ public class FactoidResult {
 	private ReturnType returnType;
 	private String target;
 	private String body;
+	private boolean forced = false;
 
 	public ReturnType getReturnType() {
 		return returnType;
@@ -47,5 +48,13 @@ public class FactoidResult {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public boolean isForced() {
+		return forced;
+	}
+
+	public void setForced(boolean forced) {
+		this.forced = forced;
 	}
 }
