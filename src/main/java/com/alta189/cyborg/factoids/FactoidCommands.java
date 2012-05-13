@@ -18,14 +18,14 @@
  */
 package com.alta189.cyborg.factoids;
 
-import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
-import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
-
 import com.alta189.cyborg.api.command.CommandContext;
 import com.alta189.cyborg.api.command.CommandSource;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.util.StringUtils;
 import com.alta189.cyborg.factoids.util.DateUtil;
+
+import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
+import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class FactoidCommands {
 	@Command(name = "remember", desc = "Remembers a factoid", aliases = {"r"})

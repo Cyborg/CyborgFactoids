@@ -16,19 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 
 public class FactoidContext {
-	
 	private final LocationType locationType;
 	private final Channel channel;
 	private final User sender;
 	private String rawArgs;
-	
+
 	public FactoidContext(Channel channel, User sender, LocationType locationType, String rawArgs) {
 		this.locationType = locationType;
 		this.channel = channel;
@@ -47,7 +45,7 @@ public class FactoidContext {
 	public FactoidContext(User sender, String rawArgs) {
 		this(null, sender, LocationType.PRIVATE_MESSAGE, rawArgs);
 	}
-	
+
 	public FactoidContext(User sender) {
 		this(null, sender, LocationType.PRIVATE_MESSAGE, null);
 	}
@@ -63,11 +61,11 @@ public class FactoidContext {
 	public User getSender() {
 		return sender;
 	}
-	
+
 	public String getRawArgs() {
 		return rawArgs;
 	}
-	
+
 	public void setRawArgs(String rawArgs) {
 		this.rawArgs = rawArgs;
 	}

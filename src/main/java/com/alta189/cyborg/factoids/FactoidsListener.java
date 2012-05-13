@@ -25,14 +25,13 @@ import com.alta189.cyborg.api.event.Order;
 import com.alta189.cyborg.api.event.bot.PrivateMessageEvent;
 import com.alta189.cyborg.api.event.channel.MessageEvent;
 import com.alta189.cyborg.factoids.handlers.Handler;
+import org.pircbotx.User;
 
 import static com.alta189.cyborg.factoids.FactoidManager.getArgs;
 import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
 import static com.alta189.cyborg.factoids.FactoidManager.getFactoidFromRaw;
 import static com.alta189.cyborg.factoids.FactoidManager.getHandler;
 import static com.alta189.cyborg.factoids.FactoidManager.getPrefix;
-
-import org.pircbotx.User;
 
 public class FactoidsListener implements Listener {
 	@EventHandler

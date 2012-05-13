@@ -22,7 +22,6 @@ import com.alta189.cyborg.factoids.util.DateUtil;
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
-
 import org.pircbotx.User;
 
 @Table(name = "factoids")

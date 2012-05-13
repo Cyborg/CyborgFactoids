@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids.util;
 
 import java.text.DateFormat;
@@ -26,7 +25,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DateUtil {
-
 	private static final DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss.SSS z");
 
 	static {
@@ -62,5 +60,4 @@ public class DateUtil {
 		cal.setTime(date);
 		return formatter.format(cal.getTime());
 	}
-
 }

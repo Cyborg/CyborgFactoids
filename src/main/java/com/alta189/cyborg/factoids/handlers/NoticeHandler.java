@@ -24,7 +24,6 @@ import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.ReturnType;
 
 public class NoticeHandler implements Handler {
-	
 	private static final String name = "notice";
 
 	@Override
@@ -35,7 +34,7 @@ public class NoticeHandler implements Handler {
 	@Override
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
 		FactoidResult result = new FactoidResult();
-		
+
 		result.setBody(factoid.getContents());
 		result.setReturnType(ReturnType.NOTICE);
 		result.setTarget(context.getSender().getNick());

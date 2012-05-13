@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids.handlers;
 
 import com.alta189.cyborg.factoids.Factoid;
@@ -24,9 +23,7 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 
 public interface Handler {
-	
 	public String getName();
-	
+
 	public FactoidResult handle(Factoid factoid, FactoidContext context);
-	
 }

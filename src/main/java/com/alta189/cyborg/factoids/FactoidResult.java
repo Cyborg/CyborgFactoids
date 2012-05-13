@@ -16,11 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids;
 
 public class FactoidResult {
-
 	private ReturnType returnType;
 	private String target;
 	private String body;

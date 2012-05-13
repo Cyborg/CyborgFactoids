@@ -16,14 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.alta189.cyborg.factoids.handlers.Handler;
 import com.alta189.simplesave.Configuration;
@@ -31,9 +24,13 @@ import com.alta189.simplesave.Database;
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FactoidManager {
-	
 	private static final Map<String, Handler> handlers = new HashMap<String, Handler>();
 	private static Database db;
 
@@ -52,7 +49,7 @@ public class FactoidManager {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	protected static void close() {
 		try {
 			db.close();
@@ -64,11 +61,11 @@ public class FactoidManager {
 	public static Collection<Handler> getHandlers() {
 		return Collections.unmodifiableCollection(handlers.values());
 	}
-	
+
 	public static void registerHandler(Handler handler) {
 		handlers.put(handler.getName().toLowerCase(), handler);
 	}
-	
+
 	public static Handler getHandler(String name) {
 		return handlers.get(name.toLowerCase());
 	}
@@ -80,23 +77,24 @@ public class FactoidManager {
 	public static Factoid getFactoid(String name) {
 		return db.select(Factoid.class).where().equal("name", name).and().equal("forgotten", false).execute().findOne();
 	}
-	
+
 	public static Factoid getFactoid(String name, String location) {
 		return db.select(Factoid.class).where().equal("name", name).and().equal("location", location).and().equal("forgotten", false).execute().findOne();
 	}
-	
+
 	public static Database getDatabase() {
 		return db;
 	}
-	
+
 	public static void saveFactoid(Factoid factoid) {
 		db.save(Factoid.class, factoid);
 	}
-	
+
 	public static String getFactoidFromRaw(String raw) {
 		String prefix = getPrefix(raw);
-		if (prefix == null)
+		if (prefix == null) {
 			return null;
+		}
 		raw = raw.substring(1);
 
 		if (raw.contains(" ")) {
@@ -107,19 +105,21 @@ public class FactoidManager {
 
 	public static String getPrefix(String raw) {
 		String p = raw.substring(0, 1);
-		if (p.equals("!") || p.equals("?"))
+		if (p.equals("!") || p.equals("?")) {
 			return p;
+		}
 		return null;
 	}
 
 	public static String getArgs(String raw) {
-		if (!raw.contains(" ") || raw.equals(" "))
+		if (!raw.contains(" ") || raw.equals(" ")) {
 			return null;
+		}
 
 		int firstSpace = raw.indexOf(" ");
-		if (firstSpace + 1 >= raw.length())
+		if (firstSpace + 1 >= raw.length()) {
 			return null;
+		}
 		return raw.substring(firstSpace + 1);
 	}
-	
 }

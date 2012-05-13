@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids.handlers;
 
 import com.alta189.cyborg.factoids.Factoid;
@@ -26,7 +25,6 @@ import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
 
 public class ReplyHandler implements Handler {
-	
 	private static final String name = "reply";
 
 	@Override
@@ -37,7 +35,7 @@ public class ReplyHandler implements Handler {
 	@Override
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
 		FactoidResult result = new FactoidResult();
-		
+
 		result.setBody(factoid.getContents());
 		result.setReturnType(ReturnType.MESSAGE);
 		result.setTarget(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : context.getSender().getNick());

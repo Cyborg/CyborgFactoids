@@ -16,14 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
 
 import com.alta189.cyborg.api.command.annotation.EmptyConstructorInjector;
 import com.alta189.cyborg.api.plugin.CommonPlugin;
@@ -35,9 +28,13 @@ import com.alta189.cyborg.factoids.handlers.NoticeHandler;
 import com.alta189.cyborg.factoids.handlers.ReplyHandler;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
 import com.alta189.simplesave.mysql.MySQLConstants;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
 
 public class CyborgFactoids extends CommonPlugin {
-
 	@Override
 	public void onEnable() {
 		getLogger().log(Level.INFO, "Enabling...");
@@ -58,16 +55,16 @@ public class CyborgFactoids extends CommonPlugin {
 		dbConfig.setPassword(config.getString("database.mysql.password", MySQLConstants.DefaultPass));
 
 		FactoidManager.init(dbConfig);
-		
+
 		FactoidManager.registerHandler(new ReplyHandler());
 		FactoidManager.registerHandler(new NoticeHandler());
 		FactoidManager.registerHandler(new ActionHandler());
 		FactoidManager.registerHandler(new AliasHandler());
-		
+
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
-		
+
 		getCyborg().getEventManager().registerEvents(new FactoidsListener(), this);
-		
+
 		getLogger().log(Level.INFO, "Successfully enabled!");
 	}
 
@@ -85,8 +82,9 @@ public class CyborgFactoids extends CommonPlugin {
 				if (input != null) {
 					FileOutputStream output = null;
 					try {
-						if (file.getParentFile() != null)
+						if (file.getParentFile() != null) {
 							file.getParentFile().mkdirs();
+						}
 						output = new FileOutputStream(file);
 						byte[] buf = new byte[8192];
 						int length;
@@ -94,7 +92,6 @@ public class CyborgFactoids extends CommonPlugin {
 						while ((length = input.read(buf)) > 0) {
 							output.write(buf, 0, length);
 						}
-
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
@@ -103,8 +100,9 @@ public class CyborgFactoids extends CommonPlugin {
 						} catch (Exception ignored) {
 						}
 						try {
-							if (output != null)
+							if (output != null) {
 								output.close();
+							}
 						} catch (Exception e) {
 						}
 					}
@@ -115,5 +113,4 @@ public class CyborgFactoids extends CommonPlugin {
 
 		return new YAMLProcessor(file, false, YAMLFormat.EXTENDED);
 	}
-
 }

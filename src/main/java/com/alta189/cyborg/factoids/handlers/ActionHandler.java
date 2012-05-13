@@ -25,7 +25,6 @@ import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
 
 public class ActionHandler implements Handler {
-	
 	private static final String name = "action";
 
 	@Override
@@ -36,7 +35,7 @@ public class ActionHandler implements Handler {
 	@Override
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
 		FactoidResult result = new FactoidResult();
-		
+
 		result.setBody(factoid.getContents());
 		result.setReturnType(ReturnType.ACTION);
 		result.setTarget(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : context.getSender().getNick());
