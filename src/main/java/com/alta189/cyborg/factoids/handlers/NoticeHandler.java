@@ -22,6 +22,7 @@ import com.alta189.cyborg.factoids.Factoid;
 import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.ReturnType;
+import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
 
 public class NoticeHandler implements Handler {
 	private static final String name = "notice";
@@ -35,7 +36,7 @@ public class NoticeHandler implements Handler {
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
 		FactoidResult result = new FactoidResult();
 
-		result.setBody(factoid.getContents());
+		result.setBody(VariableUtil.replaceVars(factoid.getContents(), context));
 		result.setReturnType(ReturnType.NOTICE);
 		result.setTarget(context.getSender().getNick());
 

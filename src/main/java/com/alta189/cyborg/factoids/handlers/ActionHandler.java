@@ -23,6 +23,7 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
+import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
 
 public class ActionHandler implements Handler {
 	private static final String name = "action";
@@ -36,7 +37,7 @@ public class ActionHandler implements Handler {
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
 		FactoidResult result = new FactoidResult();
 
-		result.setBody(factoid.getContents());
+		result.setBody(VariableUtil.replaceVars(factoid.getContents(), context));
 		result.setReturnType(ReturnType.ACTION);
 		result.setTarget(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : context.getSender().getNick());
 

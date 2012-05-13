@@ -122,32 +122,68 @@ public class FactoidCommands {
 		return "The factoid has been created!";
 	}
 
-	@Command(name = "info", desc = "Shows the info of a command")
-	public String info(CommandSource source, CommandContext context) {
+	@Command(name = "+", desc = "Shows the source of a factoid")
+	public String source(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return "You cannot view factoids from the terminal";
 		}
-		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
+		if (context.getPrefix() == null) {
+			System.out.println("FAIL AT PREFIX");
 			return null;
 		}
 
 		if (context.getArgs() == null || context.getArgs().length < 1) {
-			return "Correct usage is .info [global(default)/local] factoid";
+			return "Correct usage is !+ factoid";
 		}
 
-		String loc = "global";
-		String name = null;
-		if (context.getArgs()[0].startsWith("[") && context.getArgs()[0].endsWith("]") && context.getArgs()[0].length() > 3 && context.getArgs().length >= 2) {
-			loc = context.getArgs()[0].substring(1, context.getArgs()[0].length() - 1);
-			if (loc.equals("local")) {
-				loc = context.getLocation();
-			} else {
-				loc = "global";
-			}
-			name = context.getArgs()[1];
+		String loc;
+		System.out.println("context.getPrefix() = '" + context.getPrefix() + "'");
+		if (context.getPrefix().equals("!")) {
+			loc = "global";
+		} else if (context.getPrefix().equals("?") && context.getLocationType() == CommandContext.LocationType.CHANNEL) {
+			loc = context.getLocation().toLowerCase();
 		} else {
-			name = context.getArgs()[0];
+			return "BAD FAIL";
 		}
+
+		String name = context.getArgs()[0].toLowerCase();
+		
+		Factoid factoid = getDatabase().select(Factoid.class).where().equal("name", name).and().equal("location", loc).execute().findOne();
+		if (factoid == null && !loc.equals("global")) {
+			factoid = getDatabase().select(Factoid.class).where().equal("name", name).and().equal("location", "global").execute().findOne();
+		}
+
+		if (factoid == null) {
+			return "Could not find factoid";
+		}
+
+		return factoid.toString();
+	}
+
+	@Command(name = "-", desc = "Shows the source of a factoid")
+	public String info(CommandSource source, CommandContext context) {
+		if (source.getSource() != CommandSource.Source.USER) {
+			return "You cannot view factoids from the terminal";
+		}
+		if (context.getPrefix() == null) {
+			return null;
+		}
+
+		if (context.getArgs() == null || context.getArgs().length < 1) {
+			return "Correct usage is !- factoid";
+		}
+
+		String loc;
+		System.out.println("context.getPrefix() = '" + context.getPrefix() + "'");
+		if (context.getPrefix().equals("!")) {
+			loc = "global";
+		} else if (context.getPrefix().equals("?") && context.getLocationType() == CommandContext.LocationType.CHANNEL) {
+			loc = context.getLocation().toLowerCase();
+		} else {
+			return null;
+		}
+
+		String name = context.getArgs()[0].toLowerCase();
 
 		Factoid factoid = getDatabase().select(Factoid.class).where().equal("name", name).and().equal("location", loc).execute().findOne();
 		if (factoid == null && !loc.equals("global")) {
