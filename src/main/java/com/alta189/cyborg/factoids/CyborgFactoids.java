@@ -29,6 +29,10 @@ import com.alta189.cyborg.api.command.annotation.EmptyConstructorInjector;
 import com.alta189.cyborg.api.plugin.CommonPlugin;
 import com.alta189.cyborg.api.util.yaml.YAMLFormat;
 import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
+import com.alta189.cyborg.factoids.handlers.ActionHandler;
+import com.alta189.cyborg.factoids.handlers.AliasHandler;
+import com.alta189.cyborg.factoids.handlers.NoticeHandler;
+import com.alta189.cyborg.factoids.handlers.ReplyHandler;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
 import com.alta189.simplesave.mysql.MySQLConstants;
 
@@ -55,7 +59,14 @@ public class CyborgFactoids extends CommonPlugin {
 
 		FactoidManager.init(dbConfig);
 		
+		FactoidManager.registerHandler(new ReplyHandler());
+		FactoidManager.registerHandler(new NoticeHandler());
+		FactoidManager.registerHandler(new ActionHandler());
+		FactoidManager.registerHandler(new AliasHandler());
+		
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
+		
+		getCyborg().getEventManager().registerEvents(new FactoidsListener(), this);
 		
 		getLogger().log(Level.INFO, "Successfully enabled!");
 	}
