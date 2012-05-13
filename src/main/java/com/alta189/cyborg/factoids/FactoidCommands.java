@@ -33,6 +33,8 @@ public class FactoidCommands {
 	public String remember(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER)
 			return "You cannot register factoids from the terminal";
+		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals(".")))
+			return null;
 
 		if (hasPerm(source.getUser(), "factoids.deny"))
 			return "You are not allowed to create factoids";
@@ -95,7 +97,7 @@ public class FactoidCommands {
 				test = body.startsWith(" ");
 			}
 		}
-		
+
 		if (loc.equalsIgnoreCase("local") && context.getLocationType() == CommandContext.LocationType.PRIVATE_MESSAGE)
 			return "You cannot define a local factoid in a private message";
 		
