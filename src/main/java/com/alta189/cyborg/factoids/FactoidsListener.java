@@ -35,7 +35,6 @@ import static com.alta189.cyborg.factoids.FactoidManager.getPrefix;
 import org.pircbotx.User;
 
 public class FactoidsListener implements Listener {
-
 	@EventHandler
 	public void onMessage(MessageEvent event) {
 		String command = event.getMessage();
@@ -46,9 +45,9 @@ public class FactoidsListener implements Listener {
 		}
 
 		String factoidName = getFactoidFromRaw(command);
-		if (factoidName == null || factoidName.isEmpty())
+		if (factoidName == null || factoidName.isEmpty()) {
 			return;
-
+		}
 
 		Factoid factoid = null;
 
@@ -66,16 +65,17 @@ public class FactoidsListener implements Listener {
 				factoid = getDatabase().select(Factoid.class).where().equal("name", factoidName).and().equal("forgotten", false).and().equal("location", event.getChannel().getName().toLowerCase()).execute().findOne();
 				if (factoid == null) {
 					factoid = getDatabase().select(Factoid.class).where().equal("name", factoidName).and().equal("forgotten", false).and().equal("location", "global").execute().findOne();
-					if (factoid == null)
+					if (factoid == null) {
 						return;
+					}
 				}
 			}
 		}
 
 		Handler handler = getHandler(factoid.getHandler());
-		if (handler == null) 
+		if (handler == null) {
 			return;
-		
+		}
 
 		String data = null;
 		Handle handle = null;
@@ -154,15 +154,17 @@ public class FactoidsListener implements Listener {
 		}
 
 		Factoid factoid = getDatabase().select(Factoid.class).where().equal("name", factoidName).and().equal("forgotten", false).and().equal("location", "GLOBAL").execute().findOne();
-		if (factoid == null)
+		if (factoid == null) {
 			return;
+		}
 
 		Handler handler = getHandler(factoid.getHandler());
-		if (handler == null)
+		if (handler == null) {
 			return;
+		}
 
 		FactoidContext context = new FactoidContext(event.getUser(), getArgs(event.getMessage()));
-		FactoidResult result = handler.handle(factoid, context);		
+		FactoidResult result = handler.handle(factoid, context);
 
 		switch (result.getReturnType()) {
 			case ACTION:
