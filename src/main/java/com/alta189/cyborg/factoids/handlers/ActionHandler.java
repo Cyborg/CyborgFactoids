@@ -26,7 +26,7 @@ import com.alta189.cyborg.factoids.ReturnType;
 
 public class ActionHandler implements Handler {
 	
-	private static final String name = "reply";
+	private static final String name = "action";
 
 	@Override
 	public String getName() {

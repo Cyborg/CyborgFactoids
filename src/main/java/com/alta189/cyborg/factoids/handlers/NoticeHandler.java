@@ -25,7 +25,7 @@ import com.alta189.cyborg.factoids.ReturnType;
 
 public class NoticeHandler implements Handler {
 	
-	private static final String name = "reply";
+	private static final String name = "notice";
 
 	@Override
 	public String getName() {
