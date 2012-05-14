@@ -12,6 +12,7 @@
 
     <properties>
         <main.class>com.alta189.cyborg.factoids.CyborgFactoids</main.class>
+        <depends>CyborgPerms</depends>
     </properties>
 
     <dependencies>
