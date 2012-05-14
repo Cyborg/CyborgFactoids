@@ -51,6 +51,11 @@ public class FactoidCommands {
 		int end = -1;
 
 		name = raw.substring(0, raw.indexOf(" ")).toLowerCase();
+		if (name.startsWith("-"))
+			return "Factoids cannot start with '+'!";
+		if (name.startsWith("+"))
+			return "Factoids cannot start with '-'!";
+
 		int firstIndex = raw.indexOf(" ");
 		String first = raw.substring(firstIndex + 1, firstIndex + 2);
 		if (first.equals("<") || first.equals("[")) {
