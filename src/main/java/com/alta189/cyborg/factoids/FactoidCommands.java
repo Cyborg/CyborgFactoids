@@ -51,10 +51,11 @@ public class FactoidCommands {
 		int end = -1;
 
 		name = raw.substring(0, raw.indexOf(" ")).toLowerCase();
-		if (name.startsWith("-"))
+		if (name.startsWith("-")) {
 			return "Factoids cannot start with '+'!";
-		if (name.startsWith("+"))
+		} else if (name.startsWith("+")) {
 			return "Factoids cannot start with '-'!";
+		}
 
 		int firstIndex = raw.indexOf(" ");
 		String first = raw.substring(firstIndex + 1, firstIndex + 2);
@@ -211,21 +212,23 @@ public class FactoidCommands {
 		factoid.setAuthor(source.getUser());
 		factoid.setContents(body);
 		factoid.setTimestamp(DateUtil.getTodayGMTTimestamp());
-		
+
 		Factoid old = getDatabase().select(Factoid.class).where().equal("name", factoid.getName()).and().equal("location", factoid.getLocation()).execute().findOne();
-		
+
 		if (old == null) {
 			return "Factoid doesn't exist!";
 		}
-		
-		if (old.isLocked())
+
+		if (old.isLocked()) {
 			return "Cannot change because the factoid is locked!";
-		
-		if (old.isForgotten())
+		}
+
+		if (old.isForgotten()) {
 			return "Cannot change because the factoid is forgotten!";
+		}
 
 		factoid.setId(old.getId());
-		
+
 		getDatabase().save(Factoid.class, factoid);
 
 		return "The factoid has been changed!";
@@ -256,7 +259,7 @@ public class FactoidCommands {
 		}
 
 		String name = context.getArgs()[0].toLowerCase();
-		
+
 		Factoid factoid = getDatabase().select(Factoid.class).where().equal("name", name).and().equal("location", loc).execute().findOne();
 		if (factoid == null && !loc.equals("global")) {
 			factoid = getDatabase().select(Factoid.class).where().equal("name", name).and().equal("location", "global").execute().findOne();
@@ -318,13 +321,14 @@ public class FactoidCommands {
 		if (context.getArgs() == null || context.getArgs().length < 1) {
 			return "Correct usage is .lock factoid [global(default)/local]";
 		}
-		
-		if (!hasPerm(source.getUser(), "factoids.lock"))
+
+		if (!hasPerm(source.getUser(), "factoids.lock")) {
 			return "You don't have permission!";
-		
+		}
+
 		String loc = "global";
 		if (context.getArgs().length >= 2) {
-			String raw =  context.getArgs()[1];
+			String raw = context.getArgs()[1];
 			if (raw.startsWith("[") && raw.endsWith("]")) {
 				loc = raw.substring(1, raw.length() - 1).toLowerCase();
 				if (loc.equals("local")) {
@@ -342,7 +346,7 @@ public class FactoidCommands {
 		if (factoid == null) {
 			return "Could not find factoid";
 		}
-		
+
 		if (factoid.isLocked()) {
 			factoid.setLocked(false);
 			getDatabase().save(Factoid.class, factoid);
@@ -368,12 +372,13 @@ public class FactoidCommands {
 			return "Correct usage is .forget factoid [global(default)/local]";
 		}
 
-		if (!hasPerm(source.getUser(), "factoids.forget"))
+		if (!hasPerm(source.getUser(), "factoids.forget")) {
 			return "You don't have permission!";
+		}
 
 		String loc = "global";
 		if (context.getArgs().length >= 2) {
-			String raw =  context.getArgs()[1];
+			String raw = context.getArgs()[1];
 			if (raw.startsWith("[") && raw.endsWith("]")) {
 				loc = raw.substring(1, raw.length() - 1).toLowerCase();
 				if (loc.equals("local")) {
@@ -391,9 +396,10 @@ public class FactoidCommands {
 		if (factoid == null) {
 			return "Could not find factoid";
 		}
-		
-		if (factoid.isLocked())
+
+		if (factoid.isLocked()) {
 			return "Cannot change forgotten because factoid is locked!";
+		}
 
 		if (factoid.isForgotten()) {
 			factoid.setForgotten(false);
@@ -406,5 +412,4 @@ public class FactoidCommands {
 			return "Factoid is now forgotten!";
 		}
 	}
-
 }

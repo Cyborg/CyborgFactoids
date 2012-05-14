@@ -28,7 +28,6 @@ import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
 public class ReplyHandler implements Handler {
 	private static final String name = "reply";
 
-
 	@Override
 	public String getName() {
 		return name;

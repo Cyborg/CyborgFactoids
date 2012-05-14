@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids.handlers.util;
 
 import com.alta189.cyborg.api.util.StringUtils;
@@ -26,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VariableUtil {
-
 	private static final Pattern varPattern = Pattern.compile("%([0-9][0-9]{0,2}|10000)%");
 	private static final Pattern varPatternRange = Pattern.compile("%([0-9][0-9]{0,2}|10000)-([0-9][0-9]{0,2}|10000)%");
 	private static final Pattern varPatternInfinite = Pattern.compile("%([0-9][0-9]{0,2}|10000)-%");
@@ -34,18 +32,19 @@ public class VariableUtil {
 	private static final Pattern chanPattern = Pattern.compile("%chan%");
 
 	public static String replaceVars(String raw, FactoidContext context) {
-		if (context.getRawArgs() == null || context.getRawArgs().isEmpty())
+		if (context.getRawArgs() == null || context.getRawArgs().isEmpty()) {
 			return raw;
+		}
 		String[] args = context.getRawArgs().split(" ");
 		Matcher matcher = nickPattern.matcher(raw);
 		raw = matcher.replaceAll(context.getSender().getNick());
-		
+
 		if (context.getLocationType() == LocationType.CHANNEL_MESSAGE) {
 			matcher = chanPattern.matcher(raw);
 			raw = matcher.replaceAll(context.getChannel().getName());
 		}
 
-		matcher =  varPattern.matcher(raw);
+		matcher = varPattern.matcher(raw);
 		while (matcher.find()) {
 			String match = matcher.group();
 			int index = Integer.valueOf(match.substring(1, match.length() - 1));
@@ -54,7 +53,7 @@ public class VariableUtil {
 			}
 		}
 
-		matcher =  varPatternInfinite.matcher(raw);
+		matcher = varPatternInfinite.matcher(raw);
 		while (matcher.find()) {
 			String match = matcher.group();
 			int index = Integer.valueOf(match.substring(1, match.length() - 2));
@@ -63,7 +62,7 @@ public class VariableUtil {
 			}
 		}
 
-		matcher =  varPatternRange.matcher(raw);
+		matcher = varPatternRange.matcher(raw);
 		while (matcher.find()) {
 			String match = matcher.group();
 			int index = Integer.valueOf(match.substring(1, match.indexOf("-")));
@@ -71,7 +70,7 @@ public class VariableUtil {
 			System.out.println("index = '" + index + "'");
 			System.out.println("end = '" + end + "'");
 			if (args.length - 1 >= index) {
-				raw = raw.replace(match, StringUtils.toString(args, index, end,  " "));
+				raw = raw.replace(match, StringUtils.toString(args, index, end, " "));
 			}
 		}
 
