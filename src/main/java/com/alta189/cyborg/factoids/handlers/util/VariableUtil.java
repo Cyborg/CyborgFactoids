@@ -32,10 +32,6 @@ public class VariableUtil {
 	private static final Pattern chanPattern = Pattern.compile("%chan%");
 
 	public static String replaceVars(String raw, FactoidContext context) {
-		if (context.getRawArgs() == null || context.getRawArgs().isEmpty()) {
-			return raw;
-		}
-		String[] args = context.getRawArgs().split(" ");
 		Matcher matcher = nickPattern.matcher(raw);
 		raw = matcher.replaceAll(context.getSender().getNick());
 
@@ -43,6 +39,11 @@ public class VariableUtil {
 			matcher = chanPattern.matcher(raw);
 			raw = matcher.replaceAll(context.getChannel().getName());
 		}
+
+		if (context.getRawArgs() == null || context.getRawArgs().isEmpty()) {
+			return raw;
+		}
+		String[] args = context.getRawArgs().split(" ");
 
 		matcher = varPattern.matcher(raw);
 		while (matcher.find()) {
