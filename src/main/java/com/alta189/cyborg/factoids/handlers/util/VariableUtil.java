@@ -31,18 +31,12 @@ public class VariableUtil {
 	public static final Pattern nickPattern = Pattern.compile("%nick%");
 	public static final Pattern chanPattern = Pattern.compile("%chan%");
 	public static final Pattern urlPattern = Pattern.compile("%readurl\\(.*\\)%");
+	public static final Pattern readRandLinePattern = Pattern.compile("%readRandLine\\(.*\\)%");
 	public static final Pattern urlPatternURL = Pattern.compile("\\((\".*\")\\)");
 	public static final Pattern lineBreakPattern = Pattern.compile("%rn%");
 
 	public static String replaceVars(String raw, FactoidContext context) {
-		Matcher matcher = nickPattern.matcher(raw);
-		raw = matcher.replaceAll(context.getSender().getNick());
-
-		if (context.getLocationType() == LocationType.CHANNEL_MESSAGE) {
-			matcher = chanPattern.matcher(raw);
-			raw = matcher.replaceAll(context.getChannel().getName());
-		}
-
+		Matcher matcher = null;
 		String[] args;
 		if (context.getRawArgs() == null || context.getRawArgs().isEmpty()) {
 			args = new String[0];
@@ -50,7 +44,8 @@ public class VariableUtil {
 			args = context.getRawArgs().split(" ");
 		}
 
-		matcher = urlPattern.matcher(raw);while (matcher.find()) {
+		matcher = urlPattern.matcher(raw);
+		while (matcher.find()) {
 			String match = matcher.group();
 			Matcher urlMather = urlPatternURL.matcher(match);
 			if (urlMather.find()) {
@@ -75,6 +70,37 @@ public class VariableUtil {
 				raw = raw.replace(match, "");
 			}
 		}
+
+		matcher = readRandLinePattern.matcher(raw);
+		while (matcher.find()) {
+			String match = matcher.group();
+			Matcher urlMather = urlPatternURL.matcher(match);
+			if (urlMather.find()) {
+				String url =  urlMather.group();
+				if (url != null && url.length() > 4) {
+					url = url.substring(2, url.length() - 2);
+					String result = HTTPUtil.readRandomLine(url);
+					if (result == null || result.isEmpty()) {
+						raw = raw.replace(match, "");
+					} else {
+						raw = raw.replace(match, result);
+					}
+				} else {
+					raw = raw.replace(match, "");
+				}
+			} else {
+				raw = raw.replace(match, "");
+			}
+		}
+
+		matcher = nickPattern.matcher(raw);
+		raw = matcher.replaceAll(context.getSender().getNick());
+
+		if (context.getLocationType() == LocationType.CHANNEL_MESSAGE) {
+			matcher = chanPattern.matcher(raw);
+			raw = matcher.replaceAll(context.getChannel().getName());
+		}
+
 
 		matcher = varPattern.matcher(raw);
 		while (matcher.find()) {

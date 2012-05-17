@@ -19,7 +19,12 @@
 
 package com.alta189.cyborg.factoids.handlers.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -39,4 +44,34 @@ public class HTTPUtil {
 		}
 		return null;
 	}
+
+	public static String readRandomLine(String url) {
+		HttpGet request = new HttpGet(url);
+		HttpClient httpClient = new DefaultHttpClient();
+		try {
+			HttpResponse response = httpClient.execute(request);
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			List<String> lines = new ArrayList<String>();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				lines.add(line);
+			}
+			
+			if (lines.size() > 1) {
+				int i = randomNumber(0, lines.size() + 2);
+				return lines.get(i);
+			} else if (lines.size() == 1) {
+				return lines.get(0);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static int randomNumber(int min, int max) {
+		return min + (new Random()).nextInt(max-min);
+	}
+
 }
