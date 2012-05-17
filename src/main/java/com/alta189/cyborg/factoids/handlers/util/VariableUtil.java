@@ -30,6 +30,8 @@ public class VariableUtil {
 	private static final Pattern varPatternInfinite = Pattern.compile("%([0-9][0-9]{0,2}|10000)-%");
 	private static final Pattern nickPattern = Pattern.compile("%nick%");
 	private static final Pattern chanPattern = Pattern.compile("%chan%");
+	private static final Pattern urlPattern = Pattern.compile("%readurl\\(.*\\)%");
+	private static final Pattern urlPatternURL = Pattern.compile("\\((\".*\")\\)");
 
 	public static String replaceVars(String raw, FactoidContext context) {
 		Matcher matcher = nickPattern.matcher(raw);
@@ -47,6 +49,31 @@ public class VariableUtil {
 			args = context.getRawArgs().split(" ");
 		}
 
+		matcher = urlPattern.matcher(raw);while (matcher.find()) {
+			String match = matcher.group();
+			Matcher urlMather = urlPatternURL.matcher(match);
+			if (urlMather.find()) {
+				String url =  urlMather.group();
+				if (url != null && url.length() > 4) {
+					url = url.substring(2, url.length() - 2);
+					String result = HTTPUtil.readURL(url);
+					if (result != null && !result.isEmpty()) {
+						if (result.contains("\r\n")) {
+							result = result.substring(0,result.indexOf("\r\n"));
+						} else if (result.contains("\n")) {
+							result = result.substring(0,result.indexOf("\n"));
+						}
+						raw = raw.replace(match, result);
+					} else {
+						raw = raw.replace(match, "");
+					}
+				} else {
+					raw = raw.replace(match, "");
+				}
+			} else {
+				raw = raw.replace(match, "");
+			}
+		}
 
 		matcher = varPattern.matcher(raw);
 		while (matcher.find()) {
