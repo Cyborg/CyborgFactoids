@@ -51,6 +51,8 @@ public class VariableUtil {
 			int index = Integer.valueOf(match.substring(1, match.length() - 1));
 			if (args.length - 1 >= index) {
 				raw = raw.replace(match, args[index]);
+			} else {
+				raw = raw.replace(match, "");
 			}
 		}
 
@@ -60,6 +62,8 @@ public class VariableUtil {
 			int index = Integer.valueOf(match.substring(1, match.length() - 2));
 			if (args.length - 1 >= index) {
 				raw = raw.replace(match, StringUtils.toString(args, index, " "));
+			} else {
+				raw = raw.replace(match, "");
 			}
 		}
 
@@ -72,6 +76,8 @@ public class VariableUtil {
 			System.out.println("end = '" + end + "'");
 			if (args.length - 1 >= index) {
 				raw = raw.replace(match, StringUtils.toString(args, index, end, " "));
+			} else {
+				raw = raw.replace(match, "");
 			}
 		}
 
