@@ -26,6 +26,7 @@ import com.alta189.cyborg.factoids.handlers.ActionHandler;
 import com.alta189.cyborg.factoids.handlers.AliasHandler;
 import com.alta189.cyborg.factoids.handlers.HandlerAlias;
 import com.alta189.cyborg.factoids.handlers.NoticeHandler;
+import com.alta189.cyborg.factoids.handlers.PythonHandler;
 import com.alta189.cyborg.factoids.handlers.ReplyHandler;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
 import com.alta189.simplesave.mysql.MySQLConstants;
@@ -64,6 +65,9 @@ public class CyborgFactoids extends CommonPlugin {
 		registerHandler(new ActionHandler());
 		registerHandler(new HandlerAlias("act", "action"));
 		registerHandler(new AliasHandler());
+		registerHandler(new PythonHandler());
+		registerHandler(new HandlerAlias("py", "python"));
+
 
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
 
