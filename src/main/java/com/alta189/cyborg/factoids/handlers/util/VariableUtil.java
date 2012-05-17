@@ -40,10 +40,13 @@ public class VariableUtil {
 			raw = matcher.replaceAll(context.getChannel().getName());
 		}
 
+		String[] args;
 		if (context.getRawArgs() == null || context.getRawArgs().isEmpty()) {
-			return raw;
+			args = new String[0];
+		} else {
+			args = context.getRawArgs().split(" ");
 		}
-		String[] args = context.getRawArgs().split(" ");
+
 
 		matcher = varPattern.matcher(raw);
 		while (matcher.find()) {
