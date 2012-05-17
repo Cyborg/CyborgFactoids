@@ -22,6 +22,7 @@ import com.alta189.cyborg.api.command.CommandContext;
 import com.alta189.cyborg.api.command.CommandSource;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.util.StringUtils;
+import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
 import com.alta189.cyborg.factoids.util.DateUtil;
 
 import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
@@ -121,6 +122,10 @@ public class FactoidCommands {
 
 		if (getDatabase().select(Factoid.class).where().equal("name", factoid.getName()).and().equal("location", factoid.getLocation()).execute().findOne() != null) {
 			return "Factoid already exists!";
+		}
+		
+		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
+			return "You don't have permission to create multi-lined factoids";
 		}
 
 		getDatabase().save(Factoid.class, factoid);
@@ -225,6 +230,10 @@ public class FactoidCommands {
 
 		if (old.isForgotten()) {
 			return "Cannot change because the factoid is forgotten!";
+		}
+
+		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
+			return "You don't have permission to create multi-lined factoids";
 		}
 
 		factoid.setId(old.getId());

@@ -25,14 +25,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VariableUtil {
-	private static final Pattern varPattern = Pattern.compile("%([0-9][0-9]{0,2}|10000)%");
-	private static final Pattern varPatternRange = Pattern.compile("%([0-9][0-9]{0,2}|10000)-([0-9][0-9]{0,2}|10000)%");
-	private static final Pattern varPatternInfinite = Pattern.compile("%([0-9][0-9]{0,2}|10000)-%");
-	private static final Pattern nickPattern = Pattern.compile("%nick%");
-	private static final Pattern chanPattern = Pattern.compile("%chan%");
-	private static final Pattern urlPattern = Pattern.compile("%readurl\\(.*\\)%");
-	private static final Pattern urlPatternURL = Pattern.compile("\\((\".*\")\\)");
-	private static final Pattern lineBreakPattern = Pattern.compile("%rn%");
+	public static final Pattern varPattern = Pattern.compile("%([0-9][0-9]{0,2}|10000)%");
+	public static final Pattern varPatternRange = Pattern.compile("%([0-9][0-9]{0,2}|10000)-([0-9][0-9]{0,2}|10000)%");
+	public static final Pattern varPatternInfinite = Pattern.compile("%([0-9][0-9]{0,2}|10000)-%");
+	public static final Pattern nickPattern = Pattern.compile("%nick%");
+	public static final Pattern chanPattern = Pattern.compile("%chan%");
+	public static final Pattern urlPattern = Pattern.compile("%readurl\\(.*\\)%");
+	public static final Pattern urlPatternURL = Pattern.compile("\\((\".*\")\\)");
+	public static final Pattern lineBreakPattern = Pattern.compile("%rn%");
 
 	public static String replaceVars(String raw, FactoidContext context) {
 		Matcher matcher = nickPattern.matcher(raw);
@@ -113,7 +113,7 @@ public class VariableUtil {
 		}
 
 		matcher = lineBreakPattern.matcher(raw);
-		raw = matcher.replaceAll("\\r\\n");
+		raw = matcher.replaceAll(System.getProperty("line.separator"));
 		
 		return raw;
 	}
