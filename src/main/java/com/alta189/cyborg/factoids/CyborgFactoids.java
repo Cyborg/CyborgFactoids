@@ -24,6 +24,7 @@ import com.alta189.cyborg.api.util.yaml.YAMLFormat;
 import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 import com.alta189.cyborg.factoids.handlers.ActionHandler;
 import com.alta189.cyborg.factoids.handlers.AliasHandler;
+import com.alta189.cyborg.factoids.handlers.HandlerAlias;
 import com.alta189.cyborg.factoids.handlers.NoticeHandler;
 import com.alta189.cyborg.factoids.handlers.ReplyHandler;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
@@ -33,6 +34,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+
+import static com.alta189.cyborg.factoids.FactoidManager.registerHandler;
 
 public class CyborgFactoids extends CommonPlugin {
 	@Override
@@ -56,10 +59,11 @@ public class CyborgFactoids extends CommonPlugin {
 
 		FactoidManager.init(dbConfig);
 
-		FactoidManager.registerHandler(new ReplyHandler());
-		FactoidManager.registerHandler(new NoticeHandler());
-		FactoidManager.registerHandler(new ActionHandler());
-		FactoidManager.registerHandler(new AliasHandler());
+		registerHandler(new ReplyHandler());
+		registerHandler(new NoticeHandler());
+		registerHandler(new ActionHandler());
+		registerHandler(new HandlerAlias("act", "action"));
+		registerHandler(new AliasHandler());
 
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
 
