@@ -32,6 +32,7 @@ public class VariableUtil {
 	private static final Pattern chanPattern = Pattern.compile("%chan%");
 	private static final Pattern urlPattern = Pattern.compile("%readurl\\(.*\\)%");
 	private static final Pattern urlPatternURL = Pattern.compile("\\((\".*\")\\)");
+	private static final Pattern lineBreakPattern = Pattern.compile("%rn%");
 
 	public static String replaceVars(String raw, FactoidContext context) {
 		Matcher matcher = nickPattern.matcher(raw);
@@ -111,6 +112,9 @@ public class VariableUtil {
 			}
 		}
 
+		matcher = lineBreakPattern.matcher(raw);
+		raw = matcher.replaceAll("\\r\\n");
+		
 		return raw;
 	}
 }
