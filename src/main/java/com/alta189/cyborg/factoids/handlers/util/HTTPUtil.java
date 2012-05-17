@@ -58,7 +58,7 @@ public class HTTPUtil {
 			}
 			
 			if (lines.size() > 1) {
-				int i = randomNumber(0, lines.size() + 2);
+				int i = randomNumber(0, lines.size() + 1);
 				return lines.get(i);
 			} else if (lines.size() == 1) {
 				return lines.get(0);
