@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.factoids.handlers;
 
 import com.alta189.cyborg.factoids.Factoid;
@@ -31,7 +30,7 @@ import java.net.URLEncoder;
 public class PythonHandler implements Handler {
 	private static final String name = "python";
 	private static final String newLine = System.getProperty("line.separator");
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -52,7 +51,7 @@ public class PythonHandler implements Handler {
 
 		if (args != null && args.length > 0) {
 			url.append("['");
-			for (int i = 0; i < args.length; i ++) {
+			for (int i = 0; i < args.length; i++) {
 				url.append(args[i]).append("'");
 				if (i == args.length - 1) {
 					url.append("]");
@@ -64,7 +63,7 @@ public class PythonHandler implements Handler {
 			url.append("['']");
 		}
 
-		url.append("; nick='").append(context.getSender().getNick()).append("'; ").append(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : "").append("'; ");
+		url.append("; nick='").append(context.getSender().getNick()).append("'; chan='").append(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : "").append("'; ");
 		url.append(factoid.getContents());
 		String data = null;
 		try {
@@ -73,24 +72,25 @@ public class PythonHandler implements Handler {
 			e.printStackTrace();
 		}
 
-		if (data == null)
+		if (data == null) {
 			return null;
-		
+		}
+
 		url = new StringBuilder();
 		url.append("http://eval.appspot.com/eval?statement=").append(data);
-		
+
 		String result = HTTPUtil.readURL(url.toString());
-		
-		if (result == null || result.isEmpty())
+		if (result == null || result.isEmpty()) {
 			return null;
-		
+		}
+
 		if (result.contains(newLine)) {
 			result = result.split(newLine)[0];
 		}
 
-		if (result == null || result.isEmpty())
+		if (result == null || result.isEmpty()) {
 			return null;
-		
+		}
 		String handler = "reply";
 		if (result.length() > 2 && result.startsWith("<") && result.contains(">")) {
 			handler = result.substring(1, result.indexOf(">") - 1);
@@ -98,16 +98,16 @@ public class PythonHandler implements Handler {
 				handler = "reply";
 			}
 		}
-		
+
 		FactoidResult factoidResult = new FactoidResult();
 		if (handler.equalsIgnoreCase("act") || handler.equalsIgnoreCase("action")) {
 			factoidResult.setReturnType(ReturnType.ACTION);
-		} else if (handler.equalsIgnoreCase("reply")) {
+		} else if (handler.equalsIgnoreCase("notice")) {
 			factoidResult.setReturnType(ReturnType.NOTICE);
 		} else {
 			factoidResult.setReturnType(ReturnType.MESSAGE);
 		}
-		
+		factoidResult.setTarget(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : context.getSender().getNick());
 		factoidResult.setBody(result);
 
 		return factoidResult;
