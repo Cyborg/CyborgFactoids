@@ -42,7 +42,7 @@ public class FactoidsListener implements Listener {
 		if (prefix == null || prefix.isEmpty()) {
 			return;
 		}
-
+		
 		String factoidName = getFactoidFromRaw(command);
 		if (factoidName == null || factoidName.isEmpty()) {
 			return;

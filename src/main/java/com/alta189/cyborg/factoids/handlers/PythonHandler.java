@@ -91,18 +91,25 @@ public class PythonHandler implements Handler {
 		if (result == null || result.isEmpty()) {
 			return null;
 		}
-		String handler = "reply";
-		if (result.length() > 2 && result.startsWith("<") && result.contains(">")) {
-			handler = result.substring(1, result.indexOf(">") - 1);
-			if (handler == null || handler.isEmpty()) {
-				handler = "reply";
+		String handler = null;
+		if (result.length() > 4 && result.startsWith("<") && result.contains(">")) {
+			handler = result.substring(1, result.indexOf(">"));
+			if (handler.equalsIgnoreCase("act") || handler.equalsIgnoreCase("action") || handler.equalsIgnoreCase("notice") || handler.equalsIgnoreCase("reply")) {
+				result = result.substring(result.indexOf(">") + 1);
+				if (result.startsWith(" ") && result.length() > 1) {
+					result = result.substring(1, result.length());
+				}
 			}
 		}
 
+		if (result == null || result.isEmpty()) {
+			return null;
+		}
+
 		FactoidResult factoidResult = new FactoidResult();
-		if (handler.equalsIgnoreCase("act") || handler.equalsIgnoreCase("action")) {
+		if (handler != null && (handler.equalsIgnoreCase("act") || handler.equalsIgnoreCase("action"))) {
 			factoidResult.setReturnType(ReturnType.ACTION);
-		} else if (handler.equalsIgnoreCase("notice")) {
+		} else if (handler != null && handler.equalsIgnoreCase("notice")) {
 			factoidResult.setReturnType(ReturnType.NOTICE);
 		} else {
 			factoidResult.setReturnType(ReturnType.MESSAGE);
