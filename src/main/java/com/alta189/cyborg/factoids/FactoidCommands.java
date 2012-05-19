@@ -19,27 +19,29 @@
 package com.alta189.cyborg.factoids;
 
 import com.alta189.cyborg.api.command.CommandContext;
+import com.alta189.cyborg.api.command.CommandResult;
 import com.alta189.cyborg.api.command.CommandSource;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.util.StringUtils;
 import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
 import com.alta189.cyborg.factoids.util.DateUtil;
 
+import static com.alta189.cyborg.api.command.CommandResultUtil.get;
 import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
 import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class FactoidCommands {
 	@Command(name = "remember", desc = "Remembers a factoid", aliases = {"r"})
-	public String remember(CommandSource source, CommandContext context) {
+	public CommandResult remember(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot register factoids from the terminal";
+			return new CommandResult().setBody("You cannot register factoids from the terminal");
 		}
 		if (context.getPrefix() == null || !context.getPrefix().equals(".")) {
 			return null;
 		}
 
 		if (hasPerm(source.getUser(), "factoids.deny")) {
-			return "You are not allowed to create factoids";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You are not allowed to create factoids", source, context);
 		}
 
 		String raw = StringUtils.toString(context.getArgs(), " ");
@@ -53,9 +55,9 @@ public class FactoidCommands {
 
 		name = raw.substring(0, raw.indexOf(" ")).toLowerCase();
 		if (name.startsWith("-")) {
-			return "Factoids cannot start with '+'!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Factoids cannot start with '-'!", source, context);
 		} else if (name.startsWith("+")) {
-			return "Factoids cannot start with '-'!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Factoids cannot start with '+'!", source, context);
 		}
 
 		int firstIndex = raw.indexOf(" ");
@@ -109,7 +111,7 @@ public class FactoidCommands {
 		}
 
 		if (loc.equalsIgnoreCase("local") && context.getLocationType() == CommandContext.LocationType.PRIVATE_MESSAGE) {
-			return "You cannot define a local factoid in a private message";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "You cannot define a local factoid in a private message", source, context);
 		}
 
 		Factoid factoid = new Factoid();
@@ -121,29 +123,29 @@ public class FactoidCommands {
 		factoid.setTimestamp(DateUtil.getTodayGMTTimestamp());
 
 		if (getDatabase().select(Factoid.class).where().equal("name", factoid.getName()).and().equal("location", factoid.getLocation()).execute().findOne() != null) {
-			return "Factoid already exists!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE,  "Factoid already exists!", source, context);
 		}
 		
 		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
-			return "You don't have permission to create multi-lined factoids";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission to create multi-lined factoids", source, context);
 		}
 
 		getDatabase().save(Factoid.class, factoid);
 
-		return "The factoid has been created!";
+		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Factoid created!", source, context);
 	}
 
 	@Command(name = "know", desc = "Changes a factoid", aliases = {"no", "k"})
-	public String know(CommandSource source, CommandContext context) {
+	public CommandResult know(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot register factoids from the terminal";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You cannot register factoids from the terminal", source, context);
 		}
 		if (context.getPrefix() == null || !context.getPrefix().equals(".")) {
 			return null;
 		}
 
 		if (hasPerm(source.getUser(), "factoids.deny")) {
-			return "You are not allowed to change factoids";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You are not allowed to change factoids", source, context);
 		}
 
 		String raw = StringUtils.toString(context.getArgs(), " ");
@@ -207,7 +209,7 @@ public class FactoidCommands {
 		}
 
 		if (loc.equalsIgnoreCase("local") && context.getLocationType() == CommandContext.LocationType.PRIVATE_MESSAGE) {
-			return "You cannot change a local factoid in a private message";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "You cannot change a local factoid in a private message", source, context);
 		}
 
 		Factoid factoid = new Factoid();
@@ -221,50 +223,46 @@ public class FactoidCommands {
 		Factoid old = getDatabase().select(Factoid.class).where().equal("name", factoid.getName()).and().equal("location", factoid.getLocation()).execute().findOne();
 
 		if (old == null) {
-			return "Factoid doesn't exist!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Factoid doesn't exist!", source, context);
 		}
 
 		if (old.isLocked()) {
-			return "Cannot change because the factoid is locked!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Cannot change because the factoid is locked!", source, context);
 		}
 
 		if (old.isForgotten()) {
-			return "Cannot change because the factoid is forgotten!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Cannot change because the factoid is forgotten!", source, context);
 		}
 
 		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
-			return "You don't have permission to create multi-lined factoids";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission to create multi-lined factoids", source, context);
 		}
 
 		factoid.setId(old.getId());
 
 		getDatabase().save(Factoid.class, factoid);
-
-		return "The factoid has been changed!";
+		
+		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "The factoid has been changed!", source, context);
 	}
 
 	@Command(name = "+", desc = "Shows the source of a factoid")
-	public String source(CommandSource source, CommandContext context) {
+	public CommandResult source(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot view factoids from the terminal";
+			return new CommandResult().setBody("You cannot view factoids from the terminal!");
 		}
-		if (context.getPrefix() == null) {
-			System.out.println("FAIL AT PREFIX");
+		if (context.getPrefix() == null || !(context.getPrefix().equals("!") || context.getPrefix().equals("?"))) {
 			return null;
 		}
 
 		if (context.getArgs() == null || context.getArgs().length < 1) {
-			return "Correct usage is !+ factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is !+ factoid", source, context);
 		}
 
-		String loc;
-		System.out.println("context.getPrefix() = '" + context.getPrefix() + "'");
+		String loc = null;
 		if (context.getPrefix().equals("!")) {
 			loc = "global";
 		} else if (context.getPrefix().equals("?") && context.getLocationType() == CommandContext.LocationType.CHANNEL) {
 			loc = context.getLocation().toLowerCase();
-		} else {
-			return "BAD FAIL";
 		}
 
 		String name = context.getArgs()[0].toLowerCase();
@@ -275,27 +273,27 @@ public class FactoidCommands {
 		}
 
 		if (factoid == null) {
-			return "Could not find factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Could not find factoid", source, context);
 		}
 
-		return factoid.toString();
+		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, factoid.toString(), source, context);
 	}
 
 	@Command(name = "-", desc = "Shows the source of a factoid")
-	public String info(CommandSource source, CommandContext context) {
+	public CommandResult info(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot view factoids from the terminal";
+			return new CommandResult().setBody("You cannot view factoids from the terminal!");
 		}
-		if (context.getPrefix() == null) {
+
+		if (context.getPrefix() == null || !(context.getPrefix().equals("!") || context.getPrefix().equals("?"))) {
 			return null;
 		}
 
 		if (context.getArgs() == null || context.getArgs().length < 1) {
-			return "Correct usage is !- factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is !- factoid", source, context);
 		}
 
 		String loc;
-		System.out.println("context.getPrefix() = '" + context.getPrefix() + "'");
 		if (context.getPrefix().equals("!")) {
 			loc = "global";
 		} else if (context.getPrefix().equals("?") && context.getLocationType() == CommandContext.LocationType.CHANNEL) {
@@ -312,27 +310,27 @@ public class FactoidCommands {
 		}
 
 		if (factoid == null) {
-			return "Could not find factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Could not find factoid", source, context);
 		}
 
-		return factoid.getInfo();
+		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, factoid.getInfo(), source, context);
 	}
 
 	@Command(name = "lock", desc = "Shows the source of a factoid", aliases = {"l"})
-	public String lock(CommandSource source, CommandContext context) {
+	public CommandResult lock(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot view factoids from the terminal";
+			return new CommandResult().setBody("You cannot lock factoids from the terminal!");
 		}
 		if (context.getPrefix() == null || !context.getPrefix().equals(".")) {
 			return null;
 		}
 
 		if (context.getArgs() == null || context.getArgs().length < 1) {
-			return "Correct usage is .lock factoid [global(default)/local]";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .lock factoid [global(default)/local]", source, context);
 		}
 
 		if (!hasPerm(source.getUser(), "factoids.lock")) {
-			return "You don't have permission!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission!", source, context);
 		}
 
 		String loc = "global";
@@ -353,36 +351,36 @@ public class FactoidCommands {
 		}
 
 		if (factoid == null) {
-			return "Could not find factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Could not find factoid", source, context);
 		}
 
 		if (factoid.isLocked()) {
 			factoid.setLocked(false);
 			getDatabase().save(Factoid.class, factoid);
-			return "Factoid is now unlocked!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Factoid is now unlocked!", source, context);
 		} else {
 			factoid.setLocked(true);
 			factoid.setLocker(source.getUser());
 			getDatabase().save(Factoid.class, factoid);
-			return "Factoid is now locked!";
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "Factoid is now locked!", source, context);
 		}
 	}
 
 	@Command(name = "forget", desc = "Shows the source of a factoid", aliases = {"f"})
-	public String forget(CommandSource source, CommandContext context) {
+	public CommandResult forget(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
-			return "You cannot view factoids from the terminal";
+			return new CommandResult().setBody("You cannot forget factoids from the terminal!");
 		}
 		if (context.getPrefix() == null || !context.getPrefix().equals(".")) {
 			return null;
 		}
 
 		if (context.getArgs() == null || context.getArgs().length < 1) {
-			return "Correct usage is .forget factoid [global(default)/local]";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .forget factoid [global(default)/local]", source, context);
 		}
 
 		if (!hasPerm(source.getUser(), "factoids.forget")) {
-			return "You don't have permission!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission!", source, context);
 		}
 
 		String loc = "global";
@@ -403,22 +401,22 @@ public class FactoidCommands {
 		}
 
 		if (factoid == null) {
-			return "Could not find factoid";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Could not find factoid", source, context);
 		}
 
 		if (factoid.isLocked()) {
-			return "Cannot change forgotten because factoid is locked!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Cannot change forgotten because factoid is locked!", source, context);
 		}
 
 		if (factoid.isForgotten()) {
 			factoid.setForgotten(false);
 			getDatabase().save(Factoid.class, factoid);
-			return "Factoid is now not forgotten!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Factoid is now not forgotten!", source, context);
 		} else {
 			factoid.setForgotten(true);
 			factoid.setForgetter(source.getUser());
 			getDatabase().save(Factoid.class, factoid);
-			return "Factoid is now forgotten!";
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Factoid is now forgotten!", source, context);
 		}
 	}
 }
