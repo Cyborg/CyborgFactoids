@@ -34,7 +34,7 @@ import static com.alta189.cyborg.factoids.FactoidManager.getHandler;
 import static com.alta189.cyborg.factoids.FactoidManager.getPrefix;
 
 public class FactoidsListener implements Listener {
-	@EventHandler
+	@EventHandler(order = Order.LATEST)
 	public void onMessage(MessageEvent event) {
 		String command = event.getMessage();
 
