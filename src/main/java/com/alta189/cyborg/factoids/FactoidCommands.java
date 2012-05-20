@@ -178,6 +178,9 @@ public class FactoidCommands {
 				end = raw.indexOf(">");
 				if (start < end) {
 					handler = raw.substring(start + 1, end).toLowerCase();
+					if (getHandler(handler) == null) {
+						handler = null;
+					}
 				}
 			}
 
