@@ -28,6 +28,7 @@ import com.alta189.cyborg.factoids.util.DateUtil;
 
 import static com.alta189.cyborg.api.command.CommandResultUtil.get;
 import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
+import static com.alta189.cyborg.factoids.FactoidManager.getHandler;
 import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class FactoidCommands {
@@ -69,6 +70,9 @@ public class FactoidCommands {
 				end = raw.indexOf(">");
 				if (start < end) {
 					handler = raw.substring(start + 1, end).toLowerCase();
+					if (getHandler(handler) == null) {
+						handler = null;
+					}
 				}
 			}
 
