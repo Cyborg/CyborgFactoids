@@ -18,9 +18,7 @@
  */
 package com.alta189.cyborg.factoids;
 
-import com.alta189.cyborg.api.command.CommandContext;
-import com.alta189.cyborg.api.command.CommandResult;
-import com.alta189.cyborg.api.command.CommandSource;
+import com.alta189.cyborg.api.command.*;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.util.StringUtils;
 import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
@@ -45,6 +43,11 @@ public class FactoidCommands {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You are not allowed to create factoids", source, context);
 		}
 
+		
+		if (context.getArgs() == null || context.getArgs().length < 2) {
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .r factoid [global(default)/local] <handler> content...", source, context);
+		}
+		
 		String raw = StringUtils.toString(context.getArgs(), " ");
 
 		String loc = null;
@@ -150,6 +153,10 @@ public class FactoidCommands {
 
 		if (hasPerm(source.getUser(), "factoids.deny")) {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You are not allowed to change factoids", source, context);
+		}
+
+		if (context.getArgs() == null || context.getArgs().length < 2) {
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .no factoid [global(default)/local] <handler> content...", source, context);
 		}
 
 		String raw = StringUtils.toString(context.getArgs(), " ");
