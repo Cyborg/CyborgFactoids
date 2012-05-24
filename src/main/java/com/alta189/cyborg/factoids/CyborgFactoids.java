@@ -24,6 +24,7 @@ import com.alta189.cyborg.api.util.yaml.YAMLFormat;
 import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 import com.alta189.cyborg.factoids.handlers.ActionHandler;
 import com.alta189.cyborg.factoids.handlers.AliasHandler;
+import com.alta189.cyborg.factoids.handlers.CommandHandler;
 import com.alta189.cyborg.factoids.handlers.HandlerAlias;
 import com.alta189.cyborg.factoids.handlers.NoticeHandler;
 import com.alta189.cyborg.factoids.handlers.PythonHandler;
@@ -67,6 +68,8 @@ public class CyborgFactoids extends CommonPlugin {
 		registerHandler(new AliasHandler());
 		registerHandler(new PythonHandler());
 		registerHandler(new HandlerAlias("py", "python"));
+		registerHandler(new CommandHandler());
+		registerHandler(new HandlerAlias("cmd", "command"));
 
 
 		getCyborg().getCommandManager().registerCommands(this, FactoidCommands.class, new EmptyConstructorInjector());
