@@ -30,6 +30,7 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
+import java.lang.reflect.Field;
 
 public class CommandHandler implements Handler {
 	public static final String name = "command";
@@ -49,8 +50,31 @@ public class CommandHandler implements Handler {
 		if (!manager.isCommand(factoid.getContents())) {
 			return null;
 		}
-
-		CommandContext commandContext = new CommandContext(context.getRawArgs().split(" "), ".", context.getLocationType() == LocationType.CHANNEL_MESSAGE ? CommandContext.LocationType.CHANNEL : CommandContext.LocationType.PRIVATE_MESSAGE);
+		String[] args;
+		if (context.getRawArgs() != null && !context.getRawArgs().isEmpty()) {
+			if (context.getRawArgs().contains(" "))  {
+				args = context.getRawArgs().split(" ");
+			} else {
+				args = new String[]{context.getRawArgs()};
+			}
+		} else {
+			args = null;
+		}
+		
+		CommandContext commandContext = new CommandContext(args, ".", context.getLocationType() == LocationType.CHANNEL_MESSAGE ? CommandContext.LocationType.CHANNEL : CommandContext.LocationType.PRIVATE_MESSAGE);
+		if (context.getLocationType() == LocationType.CHANNEL_MESSAGE) {
+			try {
+				Field field = commandContext.getClass().getDeclaredField("location");
+				field.setAccessible(true);
+				field.set(commandContext, context.getChannel().getName());
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
 		CommandSource source = new CommandSource(context.getSender());
 
 		CommandResult commandResult = null;
