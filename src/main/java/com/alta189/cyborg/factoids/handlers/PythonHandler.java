@@ -83,6 +83,15 @@ public class PythonHandler implements Handler {
 		if (result == null || result.isEmpty()) {
 			return null;
 		}
+		
+		if (result.startsWith("Traceback (most recent call last):")) {
+			FactoidResult factoidResult = new FactoidResult();
+			factoidResult.setReturnType(ReturnType.NOTICE);
+			factoidResult.setBody(result);
+			factoidResult.setForced(true);
+			factoidResult.setTarget(context.getSender().getNick());
+			return factoidResult;
+		}
 
 		if (result.contains(newLine)) {
 			result = result.split(newLine)[0];
