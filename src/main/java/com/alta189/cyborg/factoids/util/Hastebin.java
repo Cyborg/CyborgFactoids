@@ -17,7 +17,7 @@
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.alta189.cyborg.factoids.handlers.util;
+package com.alta189.cyborg.factoids.util;
 
 public class Hastebin {
 	
