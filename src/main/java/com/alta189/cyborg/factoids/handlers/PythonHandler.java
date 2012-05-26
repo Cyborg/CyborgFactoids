@@ -86,10 +86,10 @@ public class PythonHandler implements Handler {
 
 		if (result.startsWith("Traceback (most recent call last):")) {
 			FactoidResult factoidResult = new FactoidResult();
-			factoidResult.setReturnType(ReturnType.NOTICE);
-			factoidResult.setBody(result);
+			factoidResult.setReturnType(ReturnType.MESSAGE);
+			factoidResult.setBody("There was a python error: " + HTTPUtil.hastebin(result));
 			factoidResult.setForced(true);
-			factoidResult.setTarget(context.getSender().getNick());
+			factoidResult.setTarget(context.getLocationType() == LocationType.CHANNEL_MESSAGE ? context.getChannel().getName() : context.getSender().getNick());
 			return factoidResult;
 		}
 

@@ -19,19 +19,26 @@
 
 package com.alta189.cyborg.factoids.util;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 public class HTTPUtil {
+	
+	public static final String hastebin = "http://hastebin.com/documents";
 	
 	public static String readURL(String url) {
 		HttpGet request = new HttpGet(url);
@@ -64,6 +71,27 @@ public class HTTPUtil {
 				return lines.get(0);
 			}
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String hastebin(String data)  {
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(hastebin);
+
+		try {
+			post.setEntity(new StringEntity(data));
+
+			HttpResponse response = client.execute(post);
+
+			String result = EntityUtils.toString(response.getEntity());
+			return "http://hastebin.com/" + new Gson().fromJson(result, Hastebin.class).getKey();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
