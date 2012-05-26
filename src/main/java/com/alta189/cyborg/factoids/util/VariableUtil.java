@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.alta189.cyborg.factoids.handlers.util;
+package com.alta189.cyborg.factoids.util;
 
 import com.alta189.cyborg.api.util.StringUtils;
 import com.alta189.cyborg.factoids.FactoidContext;

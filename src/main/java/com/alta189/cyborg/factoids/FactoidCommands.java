@@ -21,7 +21,7 @@ package com.alta189.cyborg.factoids;
 import com.alta189.cyborg.api.command.*;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.util.StringUtils;
-import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
+import com.alta189.cyborg.factoids.util.VariableUtil;
 import com.alta189.cyborg.factoids.util.DateUtil;
 
 import static com.alta189.cyborg.api.command.CommandResultUtil.get;

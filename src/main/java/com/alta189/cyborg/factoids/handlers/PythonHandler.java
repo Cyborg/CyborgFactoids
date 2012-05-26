@@ -23,7 +23,7 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
-import com.alta189.cyborg.factoids.handlers.util.HTTPUtil;
+import com.alta189.cyborg.factoids.util.HTTPUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 

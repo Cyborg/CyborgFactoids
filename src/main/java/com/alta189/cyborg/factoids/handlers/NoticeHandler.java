@@ -22,7 +22,7 @@ import com.alta189.cyborg.factoids.Factoid;
 import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.ReturnType;
-import com.alta189.cyborg.factoids.handlers.util.VariableUtil;
+import com.alta189.cyborg.factoids.util.VariableUtil;
 
 public class NoticeHandler implements Handler {
 	private static final String name = "notice";
