@@ -43,11 +43,11 @@ public class FactoidCommands {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You are not allowed to create factoids", source, context);
 		}
 
-		
+
 		if (context.getArgs() == null || context.getArgs().length < 2) {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .r factoid [global(default)/local] <handler> content...", source, context);
 		}
-		
+
 		String raw = StringUtils.toString(context.getArgs(), " ");
 
 		String loc = null;
@@ -132,7 +132,7 @@ public class FactoidCommands {
 		if (getDatabase().select(Factoid.class).where().equal("name", factoid.getName()).and().equal("location", factoid.getLocation()).execute().findOne() != null) {
 			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE,  "Factoid already exists!", source, context);
 		}
-		
+
 		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission to create multi-lined factoids", source, context);
 		}
@@ -255,7 +255,7 @@ public class FactoidCommands {
 		factoid.setId(old.getId());
 
 		getDatabase().save(Factoid.class, factoid);
-		
+
 		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "The factoid has been changed!", source, context);
 	}
 

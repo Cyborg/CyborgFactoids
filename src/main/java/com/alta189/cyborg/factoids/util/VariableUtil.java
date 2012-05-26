@@ -140,7 +140,7 @@ public class VariableUtil {
 
 		matcher = lineBreakPattern.matcher(raw);
 		raw = matcher.replaceAll(System.getProperty("line.separator"));
-		
+
 		return raw;
 	}
 }

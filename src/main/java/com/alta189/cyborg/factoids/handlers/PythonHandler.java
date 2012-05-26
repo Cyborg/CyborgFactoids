@@ -83,7 +83,7 @@ public class PythonHandler implements Handler {
 		if (result == null || result.isEmpty()) {
 			return null;
 		}
-		
+
 		if (result.startsWith("Traceback (most recent call last):")) {
 			FactoidResult factoidResult = new FactoidResult();
 			factoidResult.setReturnType(ReturnType.NOTICE);

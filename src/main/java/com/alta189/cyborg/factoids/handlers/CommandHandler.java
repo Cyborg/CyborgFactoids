@@ -60,7 +60,7 @@ public class CommandHandler implements Handler {
 		} else {
 			args = null;
 		}
-		
+
 		CommandContext commandContext = new CommandContext(args, ".", context.getLocationType() == LocationType.CHANNEL_MESSAGE ? CommandContext.LocationType.CHANNEL : CommandContext.LocationType.PRIVATE_MESSAGE);
 		if (context.getLocationType() == LocationType.CHANNEL_MESSAGE) {
 			try {
@@ -73,8 +73,8 @@ public class CommandHandler implements Handler {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
+
 		CommandSource source = new CommandSource(context.getSender());
 
 		CommandResult commandResult = null;
