@@ -30,19 +30,15 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
+
 import java.lang.reflect.Field;
 
-public class CommandHandler implements Handler {
-	public static final String name = "command";
+public class CommandHandler extends Handler {
 	public final CommandManager manager;
 
 	public CommandHandler() {
+		super("command", "A factoid with this handler executes the command in its contents");
 		manager = Cyborg.getInstance().getCommandManager();
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override
@@ -52,7 +48,7 @@ public class CommandHandler implements Handler {
 		}
 		String[] args;
 		if (context.getRawArgs() != null && !context.getRawArgs().isEmpty()) {
-			if (context.getRawArgs().contains(" "))  {
+			if (context.getRawArgs().contains(" ")) {
 				args = context.getRawArgs().split(" ");
 			} else {
 				args = new String[]{context.getRawArgs()};
@@ -73,7 +69,6 @@ public class CommandHandler implements Handler {
 				e.printStackTrace();
 			}
 		}
-
 
 		CommandSource source = new CommandSource(context.getSender());
 

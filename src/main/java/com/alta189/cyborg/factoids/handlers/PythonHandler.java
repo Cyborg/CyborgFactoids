@@ -24,16 +24,15 @@ import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
 import com.alta189.cyborg.factoids.util.HTTPUtil;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class PythonHandler implements Handler {
-	private static final String name = "python";
+public class PythonHandler extends Handler {
 	private static final String newLine = System.getProperty("line.separator");
 
-	@Override
-	public String getName() {
-		return name;
+	public PythonHandler() {
+		super("python", "Execute the contents of a factoid using external, sandboxed python shell");
 	}
 
 	@Override

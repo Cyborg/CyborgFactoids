@@ -25,12 +25,10 @@ import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
 import com.alta189.cyborg.factoids.util.VariableUtil;
 
-public class ReplyHandler implements Handler {
-	private static final String name = "reply";
+public class ReplyHandler extends Handler {
 
-	@Override
-	public String getName() {
-		return name;
+	public ReplyHandler() {
+		super("reply", "Replys with a factoids contents");
 	}
 
 	@Override

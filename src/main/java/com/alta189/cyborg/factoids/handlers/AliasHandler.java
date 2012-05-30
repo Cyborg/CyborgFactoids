@@ -23,12 +23,10 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidManager;
 import com.alta189.cyborg.factoids.FactoidResult;
 
-public class AliasHandler implements Handler {
-	private static final String name = "alias";
+public class AliasHandler extends Handler {
 
-	@Override
-	public String getName() {
-		return name;
+	public AliasHandler() {
+		super("alias", "A factoid with the alias handler becomes an alias to the factoid that is stored in the contents of the factoid with the alias handler");
 	}
 
 	@Override

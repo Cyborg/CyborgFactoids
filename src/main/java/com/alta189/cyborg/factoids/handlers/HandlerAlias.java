@@ -24,23 +24,16 @@ import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidManager;
 import com.alta189.cyborg.factoids.FactoidResult;
 
-public class HandlerAlias implements Handler {
-	
-	private final String name;
-	private final String parent;
-	
+public class HandlerAlias extends Handler {
+	private final Handler parent;
+
 	public HandlerAlias(String name, String parent) {
-		this.name = name;
-		this.parent = parent;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
+		super(name, FactoidManager.getHandler(parent).getDescription());
+		this.parent = FactoidManager.getHandler(parent);
 	}
 
 	@Override
 	public FactoidResult handle(Factoid factoid, FactoidContext context) {
-		return FactoidManager.getHandler(parent).handle(factoid, context);
+		return parent.handle(factoid, context);
 	}
 }

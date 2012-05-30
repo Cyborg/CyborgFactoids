@@ -22,8 +22,23 @@ import com.alta189.cyborg.factoids.Factoid;
 import com.alta189.cyborg.factoids.FactoidContext;
 import com.alta189.cyborg.factoids.FactoidResult;
 
-public interface Handler {
-	public String getName();
+public abstract class Handler {
 
-	public FactoidResult handle(Factoid factoid, FactoidContext context);
+	private final String name;
+	private final String description;
+
+	public Handler(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public abstract FactoidResult handle(Factoid factoid, FactoidContext context);
 }

@@ -24,12 +24,10 @@ import com.alta189.cyborg.factoids.FactoidResult;
 import com.alta189.cyborg.factoids.ReturnType;
 import com.alta189.cyborg.factoids.util.VariableUtil;
 
-public class NoticeHandler implements Handler {
-	private static final String name = "notice";
+public class NoticeHandler extends Handler {
 
-	@Override
-	public String getName() {
-		return name;
+	public NoticeHandler() {
+		super("notice", "Sends a notice");
 	}
 
 	@Override

@@ -25,12 +25,10 @@ import com.alta189.cyborg.factoids.LocationType;
 import com.alta189.cyborg.factoids.ReturnType;
 import com.alta189.cyborg.factoids.util.VariableUtil;
 
-public class ActionHandler implements Handler {
-	private static final String name = "action";
+public class ActionHandler extends Handler {
 
-	@Override
-	public String getName() {
-		return name;
+	public ActionHandler() {
+		super("action", "Performs an action");
 	}
 
 	@Override
