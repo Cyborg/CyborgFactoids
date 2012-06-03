@@ -24,7 +24,7 @@ import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 import org.pircbotx.User;
 
-@Table(name = "factoids")
+@Table("factoids")
 public class Factoid {
 	@Id
 	private int id;
