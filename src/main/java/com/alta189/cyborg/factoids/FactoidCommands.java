@@ -20,6 +20,7 @@ package com.alta189.cyborg.factoids;
 
 import com.alta189.cyborg.api.command.*;
 import com.alta189.cyborg.api.command.annotation.Command;
+import com.alta189.cyborg.api.command.annotation.Usage;
 import com.alta189.cyborg.api.util.StringUtils;
 import com.alta189.cyborg.factoids.util.VariableUtil;
 import com.alta189.cyborg.factoids.util.DateUtil;
@@ -31,6 +32,7 @@ import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class FactoidCommands {
 	@Command(name = "remember", desc = "Remembers a factoid", aliases = {"r"})
+	@Usage(".r factoid [global(default)/local] <handler> content...")
 	public CommandResult remember(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot register factoids from the terminal");
@@ -143,6 +145,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "know", desc = "Changes a factoid", aliases = {"no", "k"})
+	@Usage(".no factoid [global(default)/local] <handler> content...")
 	public CommandResult know(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You cannot register factoids from the terminal", source, context);
@@ -260,6 +263,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "+", desc = "Shows the source of a factoid")
+	@Usage("!+ factoid")
 	public CommandResult source(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot view factoids from the terminal!");
@@ -294,6 +298,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "-", desc = "Shows the source of a factoid")
+	@Usage("!- factoid")
 	public CommandResult info(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot view factoids from the terminal!");
@@ -331,6 +336,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "lock", desc = "Shows the source of a factoid", aliases = {"l"})
+	@Usage(".lock factoid [global(default)/local]")
 	public CommandResult lock(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot lock factoids from the terminal!");
@@ -381,6 +387,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "forget", desc = "Shows the source of a factoid", aliases = {"f"})
+	@Usage(".forget factoid [global(default)/local]\"")
 	public CommandResult forget(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot forget factoids from the terminal!");
