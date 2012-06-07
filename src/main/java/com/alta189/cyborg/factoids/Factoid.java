@@ -27,7 +27,7 @@ import org.pircbotx.User;
 @Table("factoids")
 public class Factoid {
 	@Id
-	private int id;
+	private long id;
 	@Field
 	private String name;
 	@Field
@@ -49,11 +49,11 @@ public class Factoid {
 	@Field
 	private long timestamp;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
