@@ -4,16 +4,57 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+	<name>CyborgFactoids</name>
     <groupId>com.alta189.cyborg</groupId>
     <artifactId>factoids</artifactId>
-    <name>CyborgFactoids</name>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <description>Factoids plugin for Cyborg</description>
 
     <properties>
         <main.class>com.alta189.cyborg.factoids.CyborgFactoids</main.class>
         <depends>CyborgPerms</depends>
     </properties>
+
+	<distributionManagement>
+		<!-- Publish versioned releases here -->
+		<repository>
+			<id>nexus</id>
+			<name>nexus.alta189</name>
+			<url>http://nexus.alta189.com/content/repositories/releases</url>
+		</repository>
+
+		<!-- Publish snapshots here -->
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>nexus.alta189</name>
+			<url>http://nexus.alta189.com/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- Source code -->
+	<scm>
+		<developerConnection>scm:git:git@github.com:CyborgDev/${project.name}.git</developerConnection>
+		<connection>scm:git:git://github.com/CyborgDev/${project.name}.git</connection>
+		<url>https://github.com/CyborgDev/${project.name}</url>
+	</scm>
+
+	<!-- Continuous integration -->
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://ci.alta189.com</url>
+	</ciManagement>
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<name>nesus.alta189</name>
+			<url>http://repo.alta189.com</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 
     <dependencies>
         <dependency>
