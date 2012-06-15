@@ -260,6 +260,10 @@ public class FactoidCommands {
 
 		factoid.setId(old.getId());
 
+		if (violatesFilter(factoid.getContents())) {
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "This factoid violates a filter!", source, context);
+		}
+
 		getDatabase().save(Factoid.class, factoid);
 
 		return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "The factoid has been changed!", source, context);
