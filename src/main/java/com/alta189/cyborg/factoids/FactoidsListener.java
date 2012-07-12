@@ -24,6 +24,7 @@ import com.alta189.cyborg.api.event.Listener;
 import com.alta189.cyborg.api.event.Order;
 import com.alta189.cyborg.api.event.bot.PrivateMessageEvent;
 import com.alta189.cyborg.api.event.channel.MessageEvent;
+import com.alta189.cyborg.factoids.events.PreFactoidEvent;
 import com.alta189.cyborg.factoids.handlers.Handler;
 import org.pircbotx.User;
 
@@ -111,6 +112,13 @@ public class FactoidsListener implements Listener {
 		}
 
 		FactoidContext context = new FactoidContext(event.getChannel(), event.getUser(), getArgs(command));
+
+		PreFactoidEvent preFactoidEvent = new PreFactoidEvent(factoid, context);
+		Cyborg.getInstance().getEventManager().callEvent(event);
+		if (preFactoidEvent.isCancelled()) {
+			return;
+		}
+
 		FactoidResult result = handler.handle(factoid, context);
 
 		if (result == null) {
