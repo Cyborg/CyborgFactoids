@@ -62,6 +62,7 @@ public class CyborgFactoids extends CommonPlugin {
 		FactoidManager.init(dbConfig);
 
 		registerHandler(new ReplyHandler());
+		registerHandler(new HandlerAlias("say", "reply"));
 		registerHandler(new NoticeHandler());
 		registerHandler(new ActionHandler());
 		registerHandler(new HandlerAlias("act", "action"));
