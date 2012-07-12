@@ -42,6 +42,11 @@ public class PreFactoidEvent extends Event {
 	}
 
 	@Override
+	public void setCancelled(boolean cancelled) {
+		super.setCancelled(cancelled);
+	}
+
+	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
