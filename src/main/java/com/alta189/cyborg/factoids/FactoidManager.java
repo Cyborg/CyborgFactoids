@@ -24,14 +24,19 @@ import com.alta189.simplesave.Database;
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class FactoidManager {
 	private static final Map<String, Handler> handlers = new HashMap<String, Handler>();
+	private static final List<Pattern> filteredContent = new ArrayList<Pattern>();
+	private static boolean locked = false;
 	private static Database db;
 
 	protected static void init(Configuration config) {
@@ -39,6 +44,7 @@ public class FactoidManager {
 
 		try {
 			db.registerTable(Factoid.class);
+			db.registerTable(FilteredContent.class);
 		} catch (TableRegistrationException e) {
 			throw new RuntimeException(e);
 		}
@@ -48,6 +54,7 @@ public class FactoidManager {
 		} catch (ConnectionException e) {
 			throw new RuntimeException(e);
 		}
+		loadFilteredContent();
 	}
 
 	protected static void close() {
@@ -121,5 +128,34 @@ public class FactoidManager {
 			return null;
 		}
 		return raw.substring(firstSpace + 1);
+	}
+
+	public static FilteredContent addFilteredContent(String content) {
+		FilteredContent result = new FilteredContent();
+		result.setContent(content);
+		db.save(result);
+		FactoidManager.filteredContent.add(Pattern.compile(result.getContent()));
+		return result;
+	}
+
+	public static void loadFilteredContent() {
+		locked = true;
+		filteredContent.clear();
+		List<FilteredContent> contentList = db.select(FilteredContent.class).execute().find();
+		for (FilteredContent item : contentList) {
+			filteredContent.add(Pattern.compile(item.getContent()));
+		}
+		locked = false;
+	}
+
+	public static boolean violatesFilter(String raw) {
+		while (locked) {
+		}
+		for (Pattern filter : filteredContent) {
+			if (filter.matcher(raw).find()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

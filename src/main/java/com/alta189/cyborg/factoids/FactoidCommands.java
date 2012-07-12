@@ -26,8 +26,7 @@ import com.alta189.cyborg.factoids.util.VariableUtil;
 import com.alta189.cyborg.factoids.util.DateUtil;
 
 import static com.alta189.cyborg.api.command.CommandResultUtil.get;
-import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
-import static com.alta189.cyborg.factoids.FactoidManager.getHandler;
+import static com.alta189.cyborg.factoids.FactoidManager.*;
 import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class FactoidCommands {
@@ -137,6 +136,10 @@ public class FactoidCommands {
 
 		if (VariableUtil.lineBreakPattern.matcher(factoid.getContents()).find() && !hasPerm(source.getUser(), "factoids.lined")) {
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission to create multi-lined factoids", source, context);
+		}
+
+		if (violatesFilter(factoid.getContents())) {
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "This factoid violates a filter!", source, context);
 		}
 
 		getDatabase().save(Factoid.class, factoid);
@@ -256,6 +259,10 @@ public class FactoidCommands {
 		}
 
 		factoid.setId(old.getId());
+
+		if (violatesFilter(factoid.getContents())) {
+			return get(com.alta189.cyborg.api.command.ReturnType.MESSAGE, "This factoid violates a filter!", source, context);
+		}
 
 		getDatabase().save(Factoid.class, factoid);
 
@@ -387,7 +394,7 @@ public class FactoidCommands {
 	}
 
 	@Command(name = "forget", desc = "Shows the source of a factoid", aliases = {"f"})
-	@Usage(".forget factoid [global(default)/local]\"")
+	@Usage(".forget factoid [global(default)/local]")
 	public CommandResult forget(CommandSource source, CommandContext context) {
 		if (source.getSource() != CommandSource.Source.USER) {
 			return new CommandResult().setBody("You cannot forget factoids from the terminal!");
@@ -439,5 +446,27 @@ public class FactoidCommands {
 			getDatabase().save(Factoid.class, factoid);
 			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Factoid is now forgotten!", source, context);
 		}
+	}
+
+	@Command(name = "filter", desc = "Blocks usage in factoid contents based on a regex filter")
+	@Usage(".filter <regex>...")
+	public CommandResult filter(CommandSource source, CommandContext context) {
+		if (source.getSource() != CommandSource.Source.USER) {
+			return new CommandResult().setBody("You cannot create filters from the terminal!");
+		}
+		if (context.getPrefix() == null || !context.getPrefix().equals(".")) {
+			return null;
+		}
+
+		if (context.getArgs() == null || context.getArgs().length < 1) {
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Correct usage is .filter <regex>...", source, context);
+		}
+
+		if (!hasPerm(source.getUser(), "factoids.filter")) {
+			return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "You don't have permission!", source, context);
+		}
+
+		addFilteredContent(StringUtils.toString(context.getArgs()));
+		return get(com.alta189.cyborg.api.command.ReturnType.NOTICE, "Filter saved!", source, context);
 	}
 }
