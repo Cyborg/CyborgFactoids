@@ -29,8 +29,10 @@ import com.alta189.cyborg.factoids.handlers.HandlerAlias;
 import com.alta189.cyborg.factoids.handlers.NoticeHandler;
 import com.alta189.cyborg.factoids.handlers.PythonHandler;
 import com.alta189.cyborg.factoids.handlers.ReplyHandler;
+import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.mysql.MySQLConfiguration;
 import com.alta189.simplesave.mysql.MySQLConstants;
+import com.alta189.simplesave.sqlite.SQLiteConfiguration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,12 +54,25 @@ public class CyborgFactoids extends CommonPlugin {
 			e.printStackTrace();
 		}
 
-		MySQLConfiguration dbConfig = new MySQLConfiguration();
-		dbConfig.setHost(config.getString("database.mysql.host", "127.0.0.1"));
-		dbConfig.setPort(config.getInt("database.mysql.port", MySQLConstants.DefaultPort));
-		dbConfig.setDatabase(config.getString("database.mysql.database"));
-		dbConfig.setUser(config.getString("database.mysql.user", MySQLConstants.DefaultUser));
-		dbConfig.setPassword(config.getString("database.mysql.password", MySQLConstants.DefaultPass));
+		String databaseDriver = config.getString("database.driver", "mysql");
+		Configuration dbConfig;
+
+		if (databaseDriver.equals("mysql")) {
+			MySQLConfiguration mdbConfig = new MySQLConfiguration();
+			mdbConfig.setHost(config.getString("database.mysql.host", "127.0.0.1"));
+			mdbConfig.setPort(config.getInt("database.mysql.port", MySQLConstants.DefaultPort));
+			mdbConfig.setDatabase(config.getString("database.mysql.database"));
+			mdbConfig.setUser(config.getString("database.mysql.user", MySQLConstants.DefaultUser));
+			mdbConfig.setPassword(config.getString("database.mysql.password", MySQLConstants.DefaultPass));
+			dbConfig = mdbConfig;
+		} else if (databaseDriver.equals("sqlite")) {
+			SQLiteConfiguration sdbConfig = new SQLiteConfiguration();
+			sdbConfig.setPath(config.getString("database.sqlite.path", "cyborgfactoids.sqlite"));
+			dbConfig = sdbConfig;
+		} else {
+			getLogger().log(Level.SEVERE, "Unknown database driver: " + databaseDriver);
+			return;
+		}
 
 		FactoidManager.init(dbConfig);
 
