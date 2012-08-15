@@ -36,7 +36,7 @@ import static com.alta189.cyborg.factoids.FactoidManager.getPrefix;
 import static com.alta189.cyborg.factoids.FactoidManager.violatesFilter;
 
 public class FactoidsListener implements Listener {
-	private static final String lineBreak = "line.separator";
+	private static final String lineBreak = System.getProperty("line.separator");
 	@EventHandler(order = Order.LATEST)
 	public void onMessage(MessageEvent event) {
 		String command = event.getMessage();
@@ -129,11 +129,11 @@ public class FactoidsListener implements Listener {
 				StringBuilder builder = new StringBuilder();
 				builder.append("'").append(event.getUser().getNick()).append("' said the following in '").append(event.getChannel().getName()).append("': ")
 						.append(lineBreak)
-						.append(event.getMessage())
+						.append("'").append(event.getMessage()).append("'")
 						.append(lineBreak)
 						.append("Which returned the following and violates a filter: ")
 						.append(lineBreak)
-						.append(result.getBody());
+						.append("'").append(result.getBody()).append("'");
 				Cyborg.getInstance().sendMessage(report, builder.toString());
 			}
 		}
@@ -198,11 +198,11 @@ public class FactoidsListener implements Listener {
 				}
 				StringBuilder builder = new StringBuilder();
 				builder.append("'").append(event.getUser().getNick()).append("' said the following in a PM: ")
-						.append(event.getMessage())
+						.append("'").append(event.getMessage()).append("'")
 						.append(lineBreak)
 						.append("Which returned the following and violates a filter: ")
 						.append(lineBreak)
-						.append(result.getBody());
+						.append("'").append(result.getBody()).append("'");
 				Cyborg.getInstance().sendMessage(report, builder.toString());
 			}
 		}
