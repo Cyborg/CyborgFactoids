@@ -28,12 +28,15 @@ import com.alta189.cyborg.factoids.handlers.Handler;
 import org.pircbotx.User;
 
 import static com.alta189.cyborg.factoids.FactoidManager.getArgs;
+import static com.alta189.cyborg.factoids.FactoidManager.getConfig;
 import static com.alta189.cyborg.factoids.FactoidManager.getDatabase;
 import static com.alta189.cyborg.factoids.FactoidManager.getFactoidFromRaw;
 import static com.alta189.cyborg.factoids.FactoidManager.getHandler;
 import static com.alta189.cyborg.factoids.FactoidManager.getPrefix;
+import static com.alta189.cyborg.factoids.FactoidManager.violatesFilter;
 
 public class FactoidsListener implements Listener {
+	private static final String lineBreak = "line.separator";
 	@EventHandler(order = Order.LATEST)
 	public void onMessage(MessageEvent event) {
 		String command = event.getMessage();
@@ -117,6 +120,24 @@ public class FactoidsListener implements Listener {
 			return;
 		}
 
+		if (violatesFilter(result.getBody())) {
+			String report = getConfig().getString("filter-report-channel");
+			if (report != null && !report.isEmpty()) {
+				if (!report.startsWith("#")) {
+					report = "#" + report;
+				}
+				StringBuilder builder = new StringBuilder();
+				builder.append("'").append(event.getUser().getNick()).append("' said the following in '").append(event.getChannel().getName()).append("': ")
+						.append(lineBreak)
+						.append(event.getMessage())
+						.append(lineBreak)
+						.append("Which returned the following and violates a filter: ")
+						.append(lineBreak)
+						.append(result.getBody());
+				Cyborg.getInstance().sendMessage(report, builder.toString());
+			}
+		}
+
 		if (handle == null || result.getReturnType() != ReturnType.MESSAGE || result.isForced()) {
 			switch (result.getReturnType()) {
 				case ACTION:
@@ -164,6 +185,27 @@ public class FactoidsListener implements Listener {
 
 		FactoidContext context = new FactoidContext(event.getUser(), getArgs(event.getMessage()));
 		FactoidResult result = handler.handle(factoid, context);
+
+		if (result == null) {
+			return;
+		}
+
+		if (violatesFilter(result.getBody())) {
+			String report = getConfig().getString("filter-report-channel");
+			if (report != null && !report.isEmpty()) {
+				if (!report.startsWith("#")) {
+					report = "#" + report;
+				}
+				StringBuilder builder = new StringBuilder();
+				builder.append("'").append(event.getUser().getNick()).append("' said the following in a PM: ")
+						.append(event.getMessage())
+						.append(lineBreak)
+						.append("Which returned the following and violates a filter: ")
+						.append(lineBreak)
+						.append(result.getBody());
+				Cyborg.getInstance().sendMessage(report, builder.toString());
+			}
+		}
 
 		switch (result.getReturnType()) {
 			case ACTION:

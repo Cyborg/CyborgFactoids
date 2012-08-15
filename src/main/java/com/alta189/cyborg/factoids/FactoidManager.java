@@ -18,6 +18,7 @@
  */
 package com.alta189.cyborg.factoids;
 
+import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 import com.alta189.cyborg.factoids.handlers.Handler;
 import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
@@ -38,6 +39,7 @@ public class FactoidManager {
 	private static final List<Pattern> filteredContent = new ArrayList<Pattern>();
 	private static boolean locked = false;
 	private static Database db;
+	private static YAMLProcessor config;
 
 	protected static void init(Configuration config) {
 		db = DatabaseFactory.createNewDatabase(config);
@@ -63,6 +65,14 @@ public class FactoidManager {
 		} catch (ConnectionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static YAMLProcessor getConfig() {
+		return config;
+	}
+
+	public static void setConfig(YAMLProcessor config) {
+		FactoidManager.config = config;
 	}
 
 	public static Collection<Handler> getHandlers() {

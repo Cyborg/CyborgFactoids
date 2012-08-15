@@ -5,4 +5,5 @@ database:
       port: 
       database: 
       user: 
-      password: 
+      password:
+filter-report-channel:

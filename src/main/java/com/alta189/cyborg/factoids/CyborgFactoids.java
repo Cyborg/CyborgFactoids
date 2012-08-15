@@ -60,7 +60,7 @@ public class CyborgFactoids extends CommonPlugin {
 		dbConfig.setPassword(config.getString("database.mysql.password", MySQLConstants.DefaultPass));
 
 		FactoidManager.init(dbConfig);
-
+		FactoidManager.setConfig(config);
 		registerHandler(new ReplyHandler());
 		registerHandler(new HandlerAlias("say", "reply"));
 		registerHandler(new NoticeHandler());
