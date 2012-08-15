@@ -136,6 +136,7 @@ public class FactoidsListener implements Listener {
 						.append("'").append(result.getBody()).append("'");
 				Cyborg.getInstance().sendMessage(report, builder.toString());
 			}
+			return;
 		}
 
 		if (handle == null || result.getReturnType() != ReturnType.MESSAGE || result.isForced()) {
@@ -205,6 +206,7 @@ public class FactoidsListener implements Listener {
 						.append("'").append(result.getBody()).append("'");
 				Cyborg.getInstance().sendMessage(report, builder.toString());
 			}
+			return;
 		}
 
 		switch (result.getReturnType()) {
